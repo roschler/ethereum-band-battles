@@ -1,0 +1,36 @@
+// TODO LIST
+
+TIP: Remember to restart the server after updating any of the smart contracts or the server's image of the contract's artifacts and ABI will be out-of-sync with the latest contract version!
+
+- Append check-balances report to a log file.  Add the report date/time to each report.
+
+    BUG: Escrow amounts are coming up all zeroes.  Relearn the Truffle debugger and trace out the problem.
+
+- Do another full game test.  This time, make sure the money was properly distributed and for the bands (video owners), put into escrow.  Create contract view call to read the balance for a given address if one does not already exist.
+
+- Then add my public address (Eth) to one of my videos and go again.  This time check to see if we (the band) got paid.
+
+- Create URL API so that we don't pass around the current giant URLs for created games. Instead,
+    create a link to the (need to be created) "join-game" API and store that with the game object
+    details record.
+
+    + Modify the create-game page to look for that ID and if found, make an XHR call to the server
+        to get the game details.
+
+- Save the "user name in chat room" to session storage or cookie and restore it when loading the create-game page.
+
+- Consider changing the Solidity contract as follows:
+
+    + In the loop that processes payments to bands, if a band money in escrow,
+        make an implicit call to claimEscrow() to process it.  Then, we can
+        tell bands to add their public address to their channel, and they
+        will be paid their escrow amount after the next game is played.
+
+- Can we add the other web-site javascript files to the browserify bundle?  Current create-game page is pulling down 20 to 30 Javascript files as well as the browserified files.
+
+BUGS
+
+
+LOW PRIORITY
+
+    - If the enter-game process fails for a non-game-creator player, the video they have submitted becomes unusable for them because of the previous failed attempt.

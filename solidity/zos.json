@@ -1,0 +1,7 @@
+{
+  "name": "etherbandbattles",
+  "version": "0.0.18",
+  "contracts": {
+    "EtherBandBattlesManager": "EtherBandBattlesManager"
+  }
+}

@@ -1,0 +1,7 @@
+// DEPLOYMENT NOTES
+
+- Make sure any contract instance variables are updated with the latest actual contract deployment address given the relevant blockchain platform.
+
+- This system requires Redis, currently set to port 6379.
+
+- Restrict any Google/YouTube API keys to the target domain for the web site.

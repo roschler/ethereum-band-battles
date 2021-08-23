@@ -1,0 +1,22 @@
+//- This view outputs a Javascript file with needed application settings
+//-  injected into it by the route that uses us.
+
+
+block content
+    | var g_AppConfig = new Object();
+
+    //- PubNub publish and subscribe keys.
+    | g_AppConfig.pubnub_subscribe_key = "#{pubnub_subscribe_key}";
+    | g_AppConfig.pubnub_publish_key = "#{pubnub_publish_key}";
+
+    //- EthereBandBattles ABI.
+    | g_AppConfig.ebb_abi_str = "!{ebb_abi_str}";
+
+    //- YouTube API key for client side use.
+    | g_AppConfig.youtube_api_key = "#{youtube_api_key}";
+
+    //- The ID of the desired Ethereum network to run the app on.
+    | g_AppConfig.ethereum_network_id = "#{ethereum_network_id}";
+
+    //- The Web3 provider URL the client should use.
+    // | g_AppConfig.web3_provider_url = "#{web3_provider_url}";

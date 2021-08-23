@@ -1,0 +1,12 @@
+//- The include view that has the handlebars template for the edit text mini form.
+
+// We keep a copy of the current video location here so we don't have to
+//  keep mousing over the player to see the current video location during
+//  playlist building.
+div(id="current-location-div", class="col-xs-4 my-align-vert text-mid-right")
+    div(id="time-update-div")
+        label(id="label-current-video-location", for="current-video-location-span" class="col-2 col-form-label project-field-label") Time:
+        span(id="current-video-location-span") (none)
+
+// Div for video player.
+div(id="youtube-player", class="youtube-player-div")

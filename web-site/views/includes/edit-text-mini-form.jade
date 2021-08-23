@@ -1,0 +1,13 @@
+//- The include view that has the handlebars template for the edit text mini form.
+
+// This template is for easy editing of a text field.
+div(id="edit-text-div", class="hide-float-form-div")
+    div(id="edit-text-label-div" )
+        span(id="edit-text-prompt-span" class="field-label") (to be determined)
+    div(id="edit-text-entry-div" )
+        textarea(id="edit-text-entry-textarea", class="text-entry", cols=40, maxlength=80, value="(to be determined)")
+    div(id="edit-text-entry-buttons-div")
+        button(id="edit-text-entry-ok-button" class="my-btn btn btn-successfulConfirmation btn-large")
+            i(class="icon-white icon-ok") OK
+        button(id="edit-text-entry-cancel-button" class="my-btn btn btn-danger btn-large")
+            i(class="icon-white icon-remove") Cancel

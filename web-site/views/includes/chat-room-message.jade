@@ -1,0 +1,9 @@
+//- The include view that has the handlebars template for rendering a chat message in the chat room.
+
+script(id="chat-message-template", type="text/x-handlebars-template")
+    div(id="chat-message-div", class="chat-message-holder height-100-percent")
+            // User screen name for the chat room.
+            span(id="chat-message-screen-name-span" class="field-label screen-name") {{user_details_object.screenName}}
+            // The chat message.
+            span(id="chat-message-content-span" class="field-label chat-message-content") {{messageText}}
+

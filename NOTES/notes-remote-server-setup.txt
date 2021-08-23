@@ -1,0 +1,6 @@
+NOTES - for setting up the remote server on Azure
+
+- Upgrade to Node 8.11.1 and use that exact version.  10.2.1 causes "server already listening" fatal error.
+- Upgrade Linux server on MSDN account with all patches
+- Terminate all other unneeded processes and makes sure they are not restarted by a CRON process.
+- Remove any unnecessary endpoints defined in Azure

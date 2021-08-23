@@ -1,0 +1,48 @@
+//- The include view that has form elements for the game creation form.
+
+// Host DIV.
+div(id="form-game-creation-host-div")
+
+    // ----- BUTTONS ROW.
+    div(id="buttons-row-div", class="container row btn-group button-row" role="group" aria-label="Buttons")
+        // ---------------------- BUTTONS ROW ----------------------------
+        div(class="col-xs-2 my-align-vert")
+            button(id="select-video-button" class="btn blue bg-yellow btn-md select-video") Select Video
+
+    // ----- GAME TITLE
+    div(id="game-title-label-div" )
+        label(for="game-title-input", class="col-2 col-form-label project-field-label") Game Title
+            div(id="game-title-edit", class="col-10")
+                input(id="game-title-input", class="form-control", type="text", value="", placeholder="Enter a short title for you game")
+
+    div(id="ethereum-costs-div", class="container m3 mx-auto col col-2")
+
+        // ----- ENTRY FEE
+        label(id="for-entry-fee-input", for="entry-fee-input" class="col-3 col-form-label project-field-label") Entry Fee
+            div(id="entry-fee-edit-div", class="col-10")
+                input(id="entry-fee-input", class="form-control", type="text", value="")
+
+        // ----- ETHEREUM PUBLIC ADDRESS
+
+        //label(id="ethereum-public-address-header-label", for="ethereum-public-address-input", class="col-2 col-form-label project-field-label") Your Public Address
+        //    div(id="ethereum-public-address-edit-div", class="col-10")
+        //        input(id="ethereum-public-address-input", class="user-ethereum-public-address", type="text")
+
+
+        // ----- BAND DONATION PERCENTAGE
+        label(id="band-donation-percentage-header-label", for="band-donation-percentage-input", class="col-2 col-form-label project-field-label") Band Donation Percentage
+        div(id="band-donation-percentage-with-value-label-div" )
+            label(id="band-donation-percentage-input-label", for="band-donation-percentage-input", class="col-2 col-form-label project-field-label") 50%
+            input(id="band-donation-percentage-input" class="slider band-donation-percentage-slider" data-slider-id="band-donation-percentage-slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50")
+
+    // ----- CHAT ROOM NAME
+    div(id="chat-room-name-div")
+        label(id="chat-room-name-header-label", for="chat-room-name-input") Your Name in the Chat Room
+        input(id="chat-room-name-input", class="screen-name", type="text")
+
+    // ----- CREATE GAME BUTTON
+    div(id="create-game-button-host-div", class='game-creator')
+        div(id="create-game-button-div")
+            button(id="create-game-btn", class="btn blue bg-white btn-md") Create New Game
+
+

@@ -1,0 +1,129 @@
+/* Styles for the create game section of the MAIN page */
+
+.btn {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+div#band-donation-percentage-div{
+    margin-top: 5px;
+}
+
+div#create-game-button-host-div {
+    margin-top: 10px;
+}
+
+div#chat-room-name-div {
+    display: block;
+}
+
+label#chat-room-name-header-label {
+    display: block;
+}
+
+label#chat-room-name-input-label {
+    display: block;
+    width: 220px;
+    color: black;
+}
+
+input#chat-room-name-input {
+    display: block;
+    width: 220px;
+    color: black;
+}
+
+
+
+input#game-title-input {
+    width: 600px;
+}
+
+input#entry-fee-input {
+    width: 60px;
+}
+
+input.ethereum-public-address {
+    color: black;
+    width: 500px;
+}
+
+button#create-game-btn {
+    clear: both;
+    color: black;
+    background-color: bisque;
+    display: block;
+    margin-top: 10px;
+}
+
+label#band-donation-percentage-input-label {
+    float: right;
+    width: 3em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+div#band-donation-percentage-with-value-label-div {
+    float: left;
+    margin-bottom: 10px;
+}
+
+label#band-donation-percentage-header-label {
+    display: block;
+}
+
+input#band-donation-percentage-input {
+    float: left;
+}
+
+label#linked-seek-slider-input-label {
+    float: right;
+    width: 3em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+div#linked-seek-slider-with-value-label-div {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+label#linked-seek-slider-header-label {
+    display: block;
+}
+
+label#linked-2seek-slider-input-label {
+    float: right;
+    width: 3em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+div#linked-2seek-slider-with-value-label-div {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+label#linked-2seek-slider-header-label {
+    display: block;
+}
+
+input#linked-seek-slider-input {
+    float: left;
+}
+
+label#for-entry-fee-input {
+    margin-right: 20px;
+}
+
+img.shrink-to-fit {
+    width: 300px;
+    height: auto;
+}
+
+/* Override bootstrap slider 210px fixed width. */
+.slider {
+    width: 100% !important;
+}

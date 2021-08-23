@@ -1,0 +1,3 @@
+// This file contains important aspects of the app we need to test.
+
+- Test trying to start a game with users that have not paid.  Does the client put up an error message to the game creator letting them know this and what to do about it?

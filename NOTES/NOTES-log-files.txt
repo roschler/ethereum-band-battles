@@ -1,0 +1,14 @@
+// NOTES ON LOGGING
+
+There are two logging systems in play.  The "default" one and Winston.  Currently we use Winston strictly for Ethereum transaction
+logging.  The two relevant directories are:
+
+DEFAULT LOGGING.
+
+/logs/{year}/{month}/{date}.info.json
+/logs/{year}/{month}/{date}.log.json
+
+WINSTON
+
+/logs/winston/ethtrans-{yyyy-mm-dd}.json
+

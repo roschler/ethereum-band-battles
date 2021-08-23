@@ -1,0 +1,16 @@
+//- The include view that has form elements that help the user install Metamask.
+
+// Host DIV.
+div(id="form-metamask-not-found-host-div", class="container row btn-group button-row")
+
+    // ----- Metamask detection sector.
+    div(id="metamask-detection")
+        // The graphic we show when the user does not have Metamask installed.
+        div(id="metamask-detection-graphic")
+            a(href="https://metamask.io/", target="_blank")
+                img(src="/images/metamask-not-present.png", alt="Metamask extension not found", class="shrink-to-fit")
+        // A little help text to help the user.
+        div(id="metamask-detection-text")
+            p
+                | Metamask was not detected.  Please click on the Fox graphic install Metamask.  Then return here,
+                |  refresh the page, and you'll be ready to start your video party!

@@ -1,0 +1,18 @@
+SOME NOTES ABOUT THE SOLIDITY CODE (EtherBandBattlesManager contract)
+
+setHouseAddress is not being called yet
+Do I need to call setHouseAddress or do the equivalent for the game creator address?
+
+NOTE: - The house address must be set and ALSO be the address that is making the call
+
+startGame() will fail if the house address is not set on a game
+addGameRoundResult will fail if the house address is not set on a game
+
+TRUFFLE
+
+Remember to match the "from" address for the Ganache section in truffle.js to the house public address
+    in the environment variables.  Otherwise smart contract methods that use the onlyIfOwner
+    modifier will fail (i.e. - msg.sender != owner).
+
+    Environment variable: GANACHE_HOUSE_PUBLIC_ADDRESS
+    Current value, Ganache deterministe: 0xBa6f5888C00Fe04D88404141343f439161374021

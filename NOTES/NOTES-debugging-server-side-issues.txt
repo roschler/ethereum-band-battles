@@ -1,0 +1,21 @@
+DEBUGGING SERVER SIDE ERRORS:
+
+- GENERAL:
+
+    + We use account #1 to create contracts (see truffle.js) and as the House public address.
+        Therefore, since we pay for transactions server side, the private key for desired blockchain
+        networks should be from that account too.  We use account #0 for testing transactions against
+        the smart contract.
+
+    + Remember, private keys should in most cases start with the "0x" prefix.  Ganache does not prepend that
+        suffix when it shows you the private key for an account so you have to add it yourself.
+
+- SYMPTOM: VM error from the EVM saying:
+
+    "VM Exception while processing transaction: revert Ownable: caller is not the owner"
+
+    POSSIBLE REASON: The environment variable for the private key for the account that executes transactions
+        for the server has not been updated for the selected blockchain network.  This error indicates that
+        the account that created the contract (see the _owner field in the smart contract), is not the
+        same as the entity that is executing the blockchain call against the smart contract.
+

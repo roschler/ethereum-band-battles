@@ -1,0 +1,9 @@
+// NOTES ON PAYMENTS AND ACCOUNTING, ETC.
+
+TODO:
+
+- It would be better to move the gas usage recording into the confirmation checks, in the part of that
+    code that executes when the confirmation check succeeds.  Currently the recording operations are in the
+    on-completion event handlers.  If an on-completion handler is not reached due to a fatal error in the lifecycle
+    chain of STEPS after the confirmation check succeeds, the gas usage data will be lost (but only for failed
+    games).

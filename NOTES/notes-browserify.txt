@@ -1,0 +1,10 @@
+// NOTE: You need to run these commands from this directory:
+
+/home/robert/Documents/GitHub/ME/theta-band-battles/web-site/public/javascripts/browserified-files
+
+// Current commands to Browserify what we need for the client side (see update.sh in the browserified-files directory:
+
+browserify ../misc/misc-shared.js ../game-objects/reconstituteGameObjects.js ../game-objects/video-bookmark-details.js ../game-objects/game-details.js ../game-objects/user-details.js ../game-objects/video-details.js ../../../common/solidity-helpers-misc.js ../page-support/create-game-page-support.js ../pubnub/pubnub-support-client-side.js ../app-object.js  --standalone browserified  >bundle.js
+
+// Debug with source maps.
+browserify --im ../misc/misc-shared.js ../game-objects/reconstituteGameObjects.js ../game-objects/video-bookmark-details.js ../game-objects/game-details.js ../game-objects/user-details.js ../game-objects/video-details.js ../../../common/solidity-helpers-misc.js ../page-support/create-game-page-support.js ../pubnub/pubnub-support-client-side.js ../app-object.js  --standalone browserified  >bundle.js

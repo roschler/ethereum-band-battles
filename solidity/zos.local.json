@@ -1,0 +1,27 @@
+{
+  "contracts": {
+    "EtherBandBattlesManager": {
+      "address": "0x7fba9144a6892a87367841684cb19ac997bdc9b0",
+      "bytecodeHash": "c1d271732b3eacc8f9d4fdd3e8efb6fd937149643133421d2279e8913b6263af"
+    }
+  },
+  "proxies": {
+    "EtherBandBattlesManager": [
+      {
+        "address": "0xd7080b821dac9494c890b11140c531003907f0a5",
+        "version": "0.0.17",
+        "implementation": "0x7fba9144a6892a87367841684cb19ac997bdc9b0"
+      }
+    ]
+  },
+  "app": {
+    "address": "0x73bb0cf3a3686ce5bd2b0422daf7e54d38e31fc8"
+  },
+  "version": "0.0.17",
+  "package": {
+    "address": "0xf79a280802b70a43d91c2a4865f9a3fc37a46ef2"
+  },
+  "provider": {
+    "address": "0x5ccbcd42eef118931b6bfa8cc10d2c62659f5168"
+  }
+}

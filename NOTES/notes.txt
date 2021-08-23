@@ -1,0 +1,629 @@
+WARNING: If we are not using ZOS upgradeable contracts and we deploy a new contract.  We will have
+    to make sure to "drain" the older contract of all pending payments and escrow amounts to the
+    new contract (or have the contract pay the amount forward but this would probably cost a LOT
+    of gas!).  Better to use ZOS upgradeable contracts.
+
+GLOSSARY:
+
+ESM -> Ethereum State Machine: The acronym for the framework we created that manages and executes Ethereum
+    transactions.
+
+NOTES:
+
+    WARNING: The biggest coming upgrade will be failure and retry handling for Ethereum transactions that fail or
+        time-out when it comes to being confirmed or mined, including broadcasting the proper message to all
+        EBB game clients so the clients can take appropriate action.  This is a big job so it is being postponed
+        until after the game is successfully deployed on Rinkeby and perhaps until the Spanish version is ready.
+
+NOTE: Currently not using the private payment details Redis set yet.  See start-game-api.js for further
+    details.  Look for the relevant TODO: notice.
+
+NOTE: If the Ethereum network does not respond, the system "stalls" in the ESM polling function because
+    the promises containing the Ethereum transactions don't return (the polling function busy flag stays
+    set).  We need a time-out mechanism (another timer interval perhaps?) to monitor the polling function
+    and notify all users that Ethereum network may be down and to try again later.  This has been
+    happening to us when the Ganache client crashes/freezes up.
+    -> REMEMBER: We can use PubNub to alert players when there are problems.  Ask PubNub if there's
+        a way to do a global publish to a group of active channels?
+    -> STACK OVERFLOW/etc. QUESTION: Is there any way to check to see if the Ethereum network is
+    responding?
+
+DECISION: Bands must pay Eth to claim their amounts (and therefore the balance they are owed).  They do NOT
+    need to pay Eth to find out how many games have been played against their channel.  This is an extra
+    security and privacy measure for bands.
+
+// ------------------------ TECHNICAL DEBT 1 -------------------
+
+
+TODO: --------------------- NEXT ------------------
+
+- TEST new payment code.  Remember to turn on the payment manager or nothing will happen.
+
+    - Currently getting revert during start game.  This is because I changed the environment's
+    value for the House public address to a different Ganache account so I could easily see
+    incoming payments reflected in the balance.  This won't work because the start game
+    transaction is paid for by the server and the msg.sender field is used in the
+    House address validation on the smart contract side.
+
+    >>>>> I don't think I'm actually making a payment.  Ganache does NOT show any VALUE transfer
+    transactions in the transaction list.  Get the transaction has from the logs for a payment
+    and trace out one of the payment transactions.
+
+- Running out of funds for server said payments.  Is the server receiving the payments from the game?
+    Even if not, this seems odd because I thought Ganache gives all accounts a huge starting balance.
+    (maybe time to make the first accounting report that shows all payments since contract creation).
+
+
+- Add code to ESM::sendTransaction() to use the Web3JS gasPrice() call to get the gas price to use
+    for the current transaction.  Use a fixed multiplier to raise the price a bit since that
+    price is the median of recent transactions (or just use the existing fixGasPrice() call).
+
+- Add new permission request code that asks Metamask for permission to view the user's
+    account data as per their new privacy spec.
+
+WARNING: What should we do if a payment errors out?  Is there potential now for a cyclic condition
+    to occur where we keep asking the smart contract for pending payment details, then having
+    that payment fail (if it fails in a way that does not remove the payment from the smart
+    contract's pending payment list) and round and round again.
+
+QUESTION: Should I be packing the pending payment ID struct before taking the hash of it?
+QUESTION (Stack Exchange): Any chance of a hash collision of duplicate hash with the above approach?
+
+=====
+
+- Move the player slider down a bit.  Right now the floating div over the slider that shows the time
+    makes it hard to get to the YouTube player bar.
+- Test time-out code in the ESM.
+
+- Consider adding a call to eth.getTransactionReceipt(transactionHash) as part of the ESM general
+    code BEFORE the confirmation check occurs and even if there is no confirmation check
+    handler in the confirm-and-complete object.  If the "status" field is
+
+
+    https://ethereum.stackexchange.com/questions/6007/how-can-the-transaction-status-from-a-thrown-error-be-detected-when-gas-can-be-e
+
+- Need code eventually to check for errors when publishing to the PubNub network.  Not sure yet what to do
+    in this case when these errors happen (currently because of time-outs due to tracing code).
+
+- Still getting "late to the party" add video bookmark problem.
+    Need to trace through to a successful finalizeGame() completion.  As of now, none of the code
+    in ethtrans-finalize-game.js is being reached.
+
+
+=== AFTER RINKEBY DEPLOYMENT & DEBUGGED ===
+
+- Refund capability in case Redis store is lost (get lists of old games that never completed from the smart contract
+    or add a date field to the struct game and have the smart contract do it - e.g. refundIncompleteGamesOlderThan())
+
+- Don't allow games over $100 entry fee or some similar value.  Protect the player.
+
+
+
+
+MAIN TASK:
+
+BUG during start-game-api.js when trying to pay for the game state Ethereum transaction:
+
+    (doSignedTransaction_promise) Created raw transaction for gameId(game_znxxljnx5nus2v7fqfy3bargpvnul6cb2kf42l931k77czt for operation(>>>>>start game<<<<<).  Nonce: 12, gas price(gwei): 0x09184e72a000, estimatedGas: 36819
+    Unhandled promise rejection.  Reason: TypeError: Cannot create property 'Symbol(level)' on string '(doSignedTransaction_promise) Created raw transaction for gameId(game_znxxljnx5nus2v7fqfy3bargpvnul6cb2kf42l931k77czt for operation(>>>>>start game<<<<<).  Nonce: 12, gas price(gwei): 0x09184e72a000, estimatedGas: 36819' - promise
+    Promise: [object Promise]
+
+BUG: Not seeing timer when creating a new game and waiting for confirmation it has been created (mined).
+
+
+WARNING: We are passing back user details objects to the client side code via the PubNub broadcast.  For example,
+    this happens when the server notifies the client code about a successful new player addition.  ARE THERE
+    ANY SENSITIVE DATA FIELDS IN THE USER DATA OBJECT?
+
+WARNING: Need to delete items from Redis at some point!
+
+WARNING: May need to delete old games and related storage elements (e.g. - game round results)
+    from the smart contract to save on storage or to get a gas refund. IF SO, then make sure
+    that all structs in mappings, who in turn contain mappings as fields in the struct, have all the
+    child structs in those mappings cleaned up as well (and this needs to be done recursively).
+
+    See:
+
+    https://solidity.readthedocs.io/en/develop/types.html#delete
+
+- Have the client side code react to the "new player added" PubNub broadcast and show()
+    the "paid" badge in the online user list.
+- Refactor the smart contract makePayments() call to calculatePayments() adjust all
+    code dependent on the old name.
+- Show the "paid" badge next to the game creator once the game is successfully
+    created (i.e. - have the PubNub broadcast receipt code on the client side
+    perform that task at that time.) OR !!!!!!!!!!!!! -> do not add players to the
+    online user's list until they have paid (this may already be the case).
+> CONFIRM that this is being done: Reject new players that try to join games that
+    have already started.
+
+>> START GAME
+
+- Prevent the game creator from starting a game that is already started.
+
+- Warn the game creator about leaving the game page of a started game.
+
+- Prevent the game creator from double-paying for a game that is already paid for.
+
+>> ADD PLAYER
+
+- choosing a video loses the chat room name.  Use session cookies to save it.
+
+>> HOW CAN I SAVE PEOPLE FROM DOUBLE-PAYING WHEN CREATING A GAME OR ENTERING A GAME? (i.e. - "You have already done that...")
+
+>> Make sure that only the game creator can START a game!
+
+- actually make payments to players and bands (except for escrow payments)
+- create escrow claim code and interface
+- currency converter for Create Game/Add Player UI's
+- Refund 10% of the game creation GAS fee to the game creator with each player payment.  Add pop-up
+    telling the game creator about this (Do not show again box).
+
+WARNING: In some PubNub client notifications, the current strategy is to pass on the data bag from
+    the EthTransConfirmAndComplete object to client via an AppEventResult embedded in the PubNub
+    message payload.  We need to make sure that NO SENSITIVE INFORMATION is making it back to the
+    client via this strategy?  TODO: Should we rethink this strategy?
+
+- In the make game completion handler, make the call to the contract to set the house public address
+- create a confirm call for the above
+- create a completion handler for the above.  In that handler, send out a PubNub broadcast
+-  telling everyone the game exists and is ready.
+
+--------------- BEGIN: LEGACY CODE CLEANUP
+
+WARNING: Do this on a brand new branch!
+
+REMOVE THE "OLD/LEGACY" CODE AFTER COMPLETING NEW ETHEREUM TRANSACTION FRAMEWORK.  SEE WHAT BREAKS
+AND FINISH CLEANING UP.  Search for "OLD/LEGACY".
+    -> wait-for-ethereum-blocks.js
+    -> ethereum-transactions.js
+    -> on-success-event-handlers.js
+    ?? -> ethereum-server-side-only.js - doServerSideSignedTransaction_promise()
+    ?? -> delayed-signed-transaction-execution.js
+
+--------------- END  : LEGACY CODE CLEANUP
+
+
+create-game-page-support.js: Find all instances of resolve/reject that are NOT inside a "new Promise()"
+    object creation and fix them.
+
+TEST Ethereum transaction time-out code, both client and server side!
+
+TODO: (After contest video and submission completely finished, so I can show the dApp to people)
+
+PRIORITY: Create call to make payments en masse or have the server call claimPayments in a loop.
+    (Remember, batching payments may result in a STACK TOO DEEP problem again.)
+
+    - I believe the addGameRoundResult and makePayments calls are timing out.  Why?
+        Can I write a separate log just consisting of the Ethereum transaction confirmation results,
+            without the timer interval polling messages?
+    - Server side driven pay out promise.  Loop through winning players and non-escrowed bands,
+    tell contract to pay each one, one at a time.
+    - CHANGE VIDEO SEARCH RESULTS COUNT TO 20!
+    - Reduce fixEstimatedGas() from 2x to 1.1x
+    - Create utility to constantly check server private key/mnemonic balance and warn you if it's low.
+
+EXTRA: Need to tool to make backup image of Megachat (Docker later?)
+
+THEN: (so I can show it to Emerges Americas and ask for marketing advice for reaching the latin
+    musician market)
+
+    - Spanish language version
+
+- NEXT >>>>>
+
+- Client side completion handlers in the client side transaction tracker are triggered by the
+    broadcast of an Ethereum transaction result from the server.  Currently, we are directly
+    broadcasting a "new game is ready" message via PubNub instead.  Unlike the old "wait-for-ethereum-blocks"
+    transaction manager, which broadcast an Ethereum transaction result if as part of the
+    transaction processing, the new ESM transaction manager does not
+    do this and instead, an explicit broadcast is being made from the per-case
+    on-completion handlers.
+
+Set house public address works, but client side is showing the following error in response to the PubNub
+    broadcast indicating the the new game is ready (See the Chrome  developer console):
+
+    CHANGE: The START GAME button should initially be disabled.  When the new game is ready message is
+        received, enable the button.  Also, use the PubNub notification to alter the title and the UI
+        as before to replace the "waiting for game confirmation" page title.  Find out what code did
+        that before the refactoring, and move it or change it so it responds to the PubNub broadcast.
+
+    Uncaught Error: (processGameMasterMessage) Invalid task request from game master.  Task name: new game is ready
+        at PubnubSupportClientSide.processGameMasterMessage (pubnub-support-client-side.js:359)
+        at Object.message (pubnub-support-client-side.js:483)
+        at pubnub.js:2010
+        at Array.forEach (<anonymous>)
+        at _class.announceMessage (pubnub.js:2009)
+        at pubnub.js:1917
+        at Array.forEach (<anonymous>)
+        at _class._processSubscribeResponse (pubnub.js:1839)
+        at onResponse (pubnub.js:2435)
+        at pubnub.js:4728
+
+>>> See this critical TODO in ethereum-state-machine.js regarding the "busy" flag for the
+    ESM polling function.
+
+ * TODO: Add code to monitor the elapsed time between polling function iterations and
+ * 	log any excessively long iteration runs, and add a time-out feature too.
+
+If no answer on Stack Overflow, find fastest way AROUND the client side problem.  Remember, can't easily
+dual-task the solidity-helpers-misc.js code like we did for the other shared modules because of all the
+Ethereum packages we require for the Solidity code.
+
+- What do about the case where Metamask doesn't pop up but adds a client side Eth transaction to its queue
+    and displaying the queued transaction count on the Chrome toolbar icon?  People could lose money.
+
+ETHEREUM TRANSACTIONS - DEFERRED DEPENDENT EXECUTION NOTES TO EASE CONFUSION:
+
+- On the SERVER side, the mechanism that defers execution of server side activity for a given Ethereum
+    transaction is the on-completion promise, which is executed by the ESM engine when
+    a transaction completes successfully.  The promise receives the Ethereum transaction
+    result as a parameter to that promise.
+
+- On the CLIENT side, the Ethereum transaction tracker contains a collection of Promises/functions to
+    be executed when the PubNub client side code receives an ethereum_transaction_result broadcast
+    from the gamemaster (the server).  The Ethereum transaction ID (app event ID) we create is used to find the
+    correct handler for a given transaction.  The handler was registered on the client side at the
+    time the client side Ethereum transaction took place.
+
+- On the SERVER side a transaction's on-error handler is called when the promise of any STEP in the
+    transaction chain of operations rejects, or the transaction times out.  If an on-error handler
+    is not found in the transaction's confirm and complete object, the ESM's default error handler
+    is executed.
+
+- Need to check account balance correctly on the server side (REFACTOR).
+- Current server side Ethereum transaction sending methods don't work for PAYABLE functions since
+    currently the "value" field is set to "0x00" when sending a signed transaction.
+
+DECISIONS:
+
+- The Ethereum transaction, tx Hash receipt, on-success handler, etc. needs a rewrite.  The
+two collections that have an interval based polling function need to be merged somehow, most likely
+with a Redux based state machine (sagas required)?  FOR NOW, HACKING AROUND IT WITH LAST USED
+NONCE SERVER VARIABLE.  Read the Nonce Nuance tip I printed out, also in Evernote, once the
+rewrite begins.
+
+- Restored implicit player add (game creator) to the makeGame() call since we can't add players until
+the game is created.  For now, DO NOT SHOW THE INVITE LINKS until the game has been confirmed as PAID.
+In other words, don't show the invite link after the payment has been merely submitted.  We don't want
+the game creator sending out invite links to a game that has not been mined and recorded to the blockchain
+because the invited players will not be able to join!
+
+- Once the game payment has been made, modify create-game-api to start polling.  Have the polling task
+query getGameId() with the request nonce used in creating the game.  Once it succeeds, it should mark
+the game as PAID and the game creator as PAID.
+
+- Then broadcast an EthereumTransactionResult_ebb result object over the PubNub network for two such objects.
+One for a "game created" event and another for a "player paid (game creator's ID)" event.  We will need
+the game creator's PubNub uuid for the "player paid" event.  Send out two separate EthereumTransactionResult_ebb
+message objects.
+
+- For addPlayer() route, once payment has been made create a polling promise to call the getIsPlayerInGame()
+method until it returns TRUE for the player ID that just paid.  Need to tie the player's PubNub UUID to the
+public address that was used when the payment was submitted.  (Should we add the PubNub UUID to the
+addPlayer() contract method and therefore to the makeGame() method to?)
+
+
+- Ownable and SafeMath were copied over from the "node_modules/openzeppelin-zos/" package folder into a folder that
+resides in our MAIN source tree.  This was done because the ??? (dead issue?)
+
+- Ethereum transaction nonces appear to be tied to a particular account.  Is that a private key or a public address?
+
+- IMPORTANT: Currently the result from on-success event handlers is ignored by the Ethereum transaction
+    waiter polling function.  Instead the Ethereum Transaction result (ethTransResult) is returned
+    by the polling function.  Later, we should find a way to return both (BUT NOT TO ANYTHING THAT
+    SHOWS UP ON THE CLIENT SIDE DUE TO SECURITY REASONS), if it is useful to do so.  However,
+    currently, the on-success event handler family of promise functions is NOT returning
+    a standardized result object.
+
+
+TODO: (Features)
+
+- Look at Metamask's currency conversion code.  Use it.
+
+- Make sure Ethereum transaction failures on the client side ARE shown to the client while we are in test mode.
+    Currently they are just logged to the debugger console.
+
+- Detect messages like the following that indicate your Ethereum account (server) does not have enough
+    money for new transactions: "rinkeby insufficient funds for gas * price + value".  Test with an account
+    that has low funds.
+
+- Need to do a full security audit of what damage a hostile agent could do by changing and submitting
+    game and user details objects with various fields modified in hostile ways.  May need a refactor
+    where the input channels to the server carefully control and verify the incoming game and
+    user details objects, and only the server makes certain changes to the data, while still allowing
+    for the necessary client side data entry (e.g. of the latter - game name, user name, game entry
+    fee by game creator only, etc.)  For example, perhaps the game state field should be moved out
+    of the game details object and into the GameDetailsServerSideOnly object, with the field
+    in the GameDetails object being "read-only", at least in the sense that none of the client or
+    server side code makes any decisions off of the value it contains.
+
+- See start-game-api.js.  Currently checking for all users being paid is disabled!  This must be
+    reversed soon with solid testing to make sure all users are paid before a game starts.
+
+TODO: (Debugging)
+
+- Invite link should NOT contain videoId argument!
+
+- Need to prevent start game from occurring until all player payments confirmed (all players marked
+    as paid.  Tell game creator which players have not paid yet.)
+
+- Need way for user to return to game if they accidentally leave the page.
+
+- Someone is submitting a choice after the game is over and triggering an error because the
+    game is not in the playing state.
+
+- Somewhere a stale game ID or entire game details object is being passed around, leading to the the
+    "replace not add" RedisResponse during a game add, and the sudden lack of ability in finding the
+    queued videos for a game (probably wrong game ID).
+
+- Consider making ALL game details and user detail client side updates the result of receiving
+    PubNub broadcasts, including the update of the global AppObject game details object.  Then
+    alter the server routes to broadcast those objects whenever they have changed.
+    Try to avoid client side changes to that object, even when creating the first game details object.
+    Currently many of the client side code modules update from the object(s) returned by the server
+    route API calls.  Instead, rely on PubNub broadcasts for those.
+
+    NOTE: Retrying many of the game calls on the client side without refreshing the page is going to
+    lead to stale objects being resubmitted to the server API routes and therefore a 0 response from
+    Redis because the old objects were already stored.  ALSO, stale content could be coming from the
+    user details client side browser storage.
+
+- Rejected promises are not inhibiting On-Success handlers when they should.  Also, the client is
+    NOT receiving an error.  For example,  creating a new game, if the addition of the payment
+    details object to Redis does not receive a 1, the On-success handler still fires and the
+    client side code presents the invite link, which it shouldn't.
+
+- JUNKYARD: EthereumPayment details and all code that uses it.
+- JUNKYARD: prepare-enter-game-api and all code that uses it.
+
+TODO: (Integration)
+
+- rejected Ethereum transactions are not halting further transactions that are dependent on the previous
+    ones succeeding.
+
+- Need to make winners display area scrollable.  Test with lots of videos.  Smaller font too.
+
+- Add code to onMakePaymentsSuccess to delete all Redis elements for the completed game.
+
+- Need timer animations for when the transaction is submitted via Metamask, but our code has not received
+a response yet.  Also, show expected wait time message.
+
+- Update code that initializes the Web3 object on the client side once we figure out the relationship
+between Metamask accounts and the Rinkeby network.  (See create-game-page-support.js).  At the very least,
+see if we can ask Metamask what network it's on and if it's the wrong one, ask the user to switch to the
+desired network.
+
+- Need to learn about submitting transactions in parallel to an Ethereum network.  Currently, the requirement
+that the nonce for a particular account has to be exactly one more than the last transaction is creating
+a bottleneck.  Note, if we end up keeping a single private key for each server, when we have multiple game
+servers, we will need to move the wait-for-Ethereum-blocks.DeferredTransactionExecutor() object into
+Redis.  Another approach is to have one account/private key per server.  That might result in better
+throughput due to parallel transaction submission capability, but it also might be a hassle. (Is the
+Ethereum transaction count (nonce) tied to the private key, or to a particular public address generated from it?)
+
+------------------
+
+YOUTUBE
+
+- Need to filter from YouTube search results (or pre-filter if there's an option for this) videos
+    that are not allowed to be played back on other web sites.  (i.e. - must allow syndication).  What
+    about region restrictions?
+
+
+- Need a way for users to find out if their videos are visible by all players in the game before
+    writing them to the smart contract.
+
+RESTORE ZOS
+
+Examine all full-blown Promises (new Promise()).  Add try/catch blocks to all that don't have them inside
+    the body of the Promise.
+
+RESTORE bEstimateGas FLAG IN ethereum-server-side-only.js!
+
+- CLIENT SIDE CODE: Move code after the call to create-game-api that changes to the "waiting-for-game" screen
+    to the PubNub code that reacts to broadcasts.  That action can not be taken until we know the
+    Ethereum transaction that is the makeGame() call has been confirmed, and that result will be
+    coming in over the PubNub network from the server. NOTE: This pattern will repeat itself for
+    all the Ethereum transactions, client side and server side.
+
+- Need to initalize PubNub before we call the add-player server route.
+
+- Update payment details record in Redis for user once the payment has been confirmed by the Ethereum network.
+
+- We may be able to remove the ebbDetails related items from the myconfig object and therefore also remove
+    the associated require statements.  This may improve security.
+
+- Search for TODO-restore: and restore all items.
+
+TODO: (IF TIME)
+
+- Have the server actually make the claimPayment() calls for the users.  Currently it all piles up in the
+    contracts.  Stopped because of time.
+
+TODO: (POST-CONTEST)
+    - SEARCH FOR ALL "TODO:" STATEMENTS IN THE CODE!
+
+    - Seriously considering an architecture where NONE of the user details and game details objects
+        are created on the client side.  Too many strange problems resulting from that.  Instead
+        any fields needed from the client to create either of those object should be passed to
+        a server route API call and the server returns the object from the Redis store.  In other
+        words, the server is the only source of truth.
+
+    - RESTORE Gas estimation on both the client and server sides.
+
+    - VALIDATIONS: - smart contract side
+        1) Protection against adding more game round results than there are videos/players/rounds.
+        2) Protection against calling makePayments before we have all the game round results.
+
+    - Currently the house public address is coming from the environment.  Need to figure out a way to
+        pull it off the private key we are using with the server.  We can derive it with wallet software,
+        but since multiple public addresses can be derived from a private key, we need to be sure it's
+        the one that was used as the house address.  ALSO MAKE SURE THAT ANY HOUSEADDR FUNCTIONS
+        THAT ARE CRITICAL ARE ALSO USABLE BY THE CONTRACT OWNER (in case there's a problem with
+        the house address)!
+
+    - Need to apply a "valid Ethereum address (checksum?)" test to all addresses sent to smart
+        contract methods.  Also need a way to make this bullet-proof, like having a custom
+        strongly validated type object for carrying addresses around in Javascript before
+        posting them in smart contract methods.  I put a phony Ethereum address in my YouTube
+        channel for testing purposes and it broke the addGameRoundResult() method when it tried
+        to add it as a struct field.  I guess that's where the EVM finally validates it?
+
+    >>>>> README should include warning about putting domain restrictions on your YouTube API key.
+
+    - Currently we are not doing anything with the addGameRoundResult() Ethereum transaction notification
+        results.  What should we do?
+
+    - Prevent players from paying twice (trying to enter a game they have already paid for again.
+
+    - Currently we are not checking to see if all the addGameRoundResult() transactions have been
+        confirmed.  We should do this soon because we should not call makePayments() until they
+        have all been confirmed.  NEED: server-side -> on-success event handler, client-side ->
+        ethereum transaction tracker event handler.
+
+    - CENTRALIZE smart contract game ID and Redis storage update.  Remove old code that handles this
+        especially in wait-for-entry-fee-confirmation-api.
+
+ * 	TODO: Currently we are getting the private key for signing transactions from the environment.  Switch
+ * 		over to using the PubNub vault.  The same applies to our YouTube API key.
+ *
+    - See if we can get a channels links.  If so, then start looking for the EtherBandBattles
+        balance-check link in the links collection and extract the band's Ethereum
+        public address from there.
+
+    - Don't allow duplicate video entries from different players.
+
+    - There are some addUser() and perhaps other Redis related calls that don't have their
+        return checked in the Promise block that gets the return.  Add validation code.
+
+    - When paying a band that we have found an Ethereum address for and therefore are making
+        immediate payment to, check for any escrow amounts for their channel and add them to
+        the payment, remember to zero out the escrow balance first.
+
+    - Add PubNub history replay to pick up any Ethereum related messages the server may
+        have sent out, or other PubNub broadcasts that may affect the game state or chat.
+
+    - Currently, there are on-success event handlers that update/modify the associated
+        game details objects.  This creates a window of vulnerability where the
+        copy of the game details object they have may not contain updates to that
+        object that occurred while waiting for the Ethereum transaction to mine.
+        Need a comprehensive locking/merging/refactoring to eliminate this
+        vulnerability.
+
+    - Unit tests for all promise pollers.  Especially test time-out conditions.
+
+    - Find out if having polling functions, like the ones we use to wait for confirmation
+         of the Ethereum transactions involved with this app, that are live for the average to
+         maximum time an Ethereum transaction takes to be mined will end up and therefore
+         could result in a ton of threads that can't be destroyed until the polling finishes
+         find out if that is a real possibility and if it will end up having a big negative
+         affect on the server.  If so, what is the best way to refactor or rearchitect the app
+         to fix or eliminate this (potential) problem. (FOR EXAMPLE: Create a master something
+         or other that creates a single
+
+    - Handle "user denied transaction signature" if the user rejects the transaction better.  Currently
+        we just print a log error message.
+
+    - Transactions not immediately processed by Metmask (i.e. - Metamask doesn't pop up, but shows a count
+        of pending transactions on the toolbar icon), once submitted, do not trigger any software actions
+        because our code is already out of the usual "then" block.  How to prevent Metamask from
+        "buffering" transaction or how to respond to transactions approved later by the user Metamask
+        via Metamask?  Polling some smart contract method?  It would be better to prevent this
+        situation altogether if possible.
+
+    - Can't debug Open Zeppelin contracts and EtherBandBattles Enter Game calls fail on Rinkeby, but
+        only with PROXIED contracts.  Non-proxied work fine.  It also works fine on Ganache (need to
+        recheck this).  Something about PROXIED + RINKEBY for the Enter Game call is failing.  Create
+        game works.  Smells like a storage variable problem since Enter Game relies on the presence
+        of the maps created by Create Game?  Need to rule out "wrong contract address", but it would
+        be simplest if we could debug with Truffle Debugger.  Get latest build from Nick/Truffle
+        and try debugging a gain.
+
+    - Add transaction cost estimation (cost plus gas) and check that value against the user's Eth balance.
+        If they don't have enough funds, warn them and ask them to get more funds or choose one of their accounts
+        that does have enough funds.  Show them the total transaction amount.
+
+    - Add a call to EtherBandBattlesManager.sol that tells you the house address for a particular game.  Add code
+        to the server that checks to see if the house address for a recently created game matches the house
+        address we want it to be.
+
+    - Add a call to EtherBandBattlesManager.sol that allows the contract owner to change the house address for the
+        game.
+
+    - When confirmation of the game creation is received/detected, use the first call to validate the house address
+        and if it has changed, use the second call to change it to what we want.  Log the event.  This is to
+        protect against an attacker somehow changing the address during game creation.
+
+TODO:
+
+- Make sure all traces of the Warren modules have been removed.  We do not use them anymore and they are GPL 2.0.
+    Currently there is only some test code taken from that package lying around and commented out.  Remove that
+    too.  Search for "warren" in the source.
+
+- Currently the videoStatus fields are not being updated to COMPLETED when they are done playing when
+    moving on to the next round or ending the game.
+
+- Refactor the project to have a separate object for videos so we can stop carrying around the video
+    title in all the places we also have a video ID field.
+
+- Need to check if all users have paid their entry fees before starting a game.
+    CURRENTLY THIS FIELD IS SET TO TRUE, THE DEFAULT SHOULD BE FALSE.
+
+- Do a here now when the MAIN page loads to get the full list of chat users.
+    Also, when a chat message comes in, see if the sender is in the online
+        user's list, if not, add them.
+
+- Don't allow games to be started more than once.  Hide the start button on the client side
+    and add a PHASE check on the server side.
+
+- Don't start game if there's less than 3 players.
+
+- Update all then() blocks in promises to do a careful check of the response, especially
+    Redis related responses (redisResponse).  Most notable context is checking for a 0 or 1
+    from an Add call to make sure an add or a replace took place as expected.
+
+- Fix scroll to bottom issue with chat messages window.  See processMessageEvent() in pubnub-support-client-side.js
+
+- Disable all buttons that initiate a jQuery XHR operation and re-enable them when done to avoid double-triggering.
+
+- Remove the broadcast-message-to-game route when testing is completed.
+
+- Make sure that no PubNub messages coming from users have a sender name equal to the reserved sender name.
+    (See GameDetailsConstants in game-details.js).
+
+- Evaluate possibility/risk of gamemaster messages being replayed from the PubNub message history.
+    Seems like more of a problem of not allowing anyone to "spoof" the identity of the game master.
+
+- Protect against or manage double game creation attempts by the game creator and
+    the potential double creation/initialization of resources like the PubNub library, etc.
+
+- Protect against non-game creator players from starting the game.
+
+- Replace all MIT headers with Apache 2.0 or remove them entirely.
+
+- Put in README, completed games are NOT removed from Redis.  If you want to do that, you will
+    need to add code to clear out the objects for a completed game.
+
+- Add checking for duplicate user IDs.
+
+- See this warning in misc-shared.js.
+
+- If updating the online users list gets out of sync, remember the hereNow() method,
+    which will return a complete list of everyone present in a channel or channels
+    including their current state.  See:
+
+    https://www.pubnub.com/docs/web-javascript/presence#Default_Presence_Events
+
+TODO: WARNING - switch over to a browserified version of the UUID Node.js
+package when there is time!  That library creates a better unique ID
+then getSimplifiedUuid().
+
+WEB SITE
+
+- Terms of Service
+- Privacy Policy
+- Cookies notice
+- DO NOT USE REAL ETH ON RINKEBY WARNING
+- Home page with intro video and FAQ (e.g. - how to get Rinkeby test ETH).
+- Logo: E(Eth icon)B(Music note icon)B(Battle axe icon)

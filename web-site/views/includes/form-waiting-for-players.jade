@@ -1,0 +1,58 @@
+//- The include view that has form elements for the waiting for players form.
+
+// Host DIV.
+div(id="form-waiting-for-players-host-div")
+
+    div(class="form-elements-container")
+        // ----- BUTTONS ROW.
+        div(id="wfp-buttons-row-div", class="container row btn-group" role="group" aria-label="Buttons")
+            // ---------------------- BUTTONS ROW ----------------------------
+            div(class="col-xs-2 my-align-vert")
+                // button(uuid="wfp-select-video-button" class="btn blue bg-yellow btn-md") Select Video
+
+        // ----- STATUS MESSAGE
+
+        div(id="wfp-status-message")
+            label(class="game-status generic-label") GAME STATUS
+            span(class="show-game-status generic-value") Waiting for Players...
+
+        // ----- GAME DETAILS
+        div(class="field-value-holder")
+            // Game title.
+            label(class="game-status generic-label") Title
+            span(class="show-game-title generic-value")
+
+        // ----- ENTRY FEE
+        div(class="field-value-holder")
+            label(class="game-status generic-label") Entry Fee
+            span(class="show-game-entry-fee generic-value")
+
+        // ----- BAND DONATION PERCENTAGE
+        div(class="field-value-holder")
+            label(class="game-status generic-label") Band Donation %
+            span(class="show-game-band-donation-percentage generic-value")
+
+
+    // ----- INVITE LINK
+    div(class="buttons-row-container")
+        div(class="field-value-holder")
+            label(for="game-invite-link-textarea", class="game-status generic-label") Invite Link
+            div(id="entry-fee-edit-div", class="col-10")
+                input(id="game-invite-link-textarea", class="game-invite-link form-control", type="text")
+                button(id="wfp-copy-invite-link-to-clipboard", data-clipboard-source="game-invite-link-textarea", class="copy-to-clipboard btn blue bg-white btn-md generic-button")
+                    i(id="wfp-copy-invite-link-to-clipboard-i", class="glyphicon glyphicon-copy", data-clipboard-source="game-invite-link-textarea")
+                    
+    // ----- AUTO-INVITE LINK, for testing purposes only.
+    div(class="buttons-row-container game-creator hidden")
+        div(class="field-value-holder")
+            label(for="game-auto-invite-link-textarea", class="game-status generic-label") Auto-Invite Link
+            div(id="auto-invite-child-div", class="col-10")
+                input(id="game-auto-invite-link-textarea", class="game-invite-link form-control", type="text")
+                button(id="wfp-copy-auto-invite-link-to-clipboard", data-clipboard-source="game-auto-invite-link-textarea", class="copy-to-clipboard btn blue bg-white btn-md generic-button")
+                    i(id="wfp-copy-auto-invite-link-to-clipboard-i", class="glyphicon glyphicon-copy", data-clipboard-source="game-auto-invite-link-textarea")
+
+    // ----- START GAME BUTTON
+    div(class="buttons-row-container start-game-button game-creator")
+        div(id="wfp-start-game-button-host-div")
+            div(id="wfp-start-game-button-div")
+                button(id="wfp-start-game-button", class="btn blue bg-white btn-md generic-button") Start Game

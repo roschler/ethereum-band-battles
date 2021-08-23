@@ -1,0 +1,12 @@
+/** This file contains general notes helpful in understanding how the code works */
+
+ETHEREUM TRANSACTIONS - per use case customizations
+
+The customizations for an Ethereum transaction are contained in the EthTransConfirmAndComplete object.
+
+CONFIRM AND COMPLETE OBJECT + APP EVENTS - user data bag
+
+The EthTransConfirmAndComplete object has a a "bag" property that carries the extra data a particular transaction use case requires.  The bag is passed around between all steps (if there are more than one) that occur on the server side during the lifetime of the operations that are involved with executing/facilitating the overall events.  HOWEVER, the bag is NOT Passed back to the client at any time since this could potentially be a security hole.  Instead, each PubNub payload builder function builds and shapes it's own AppEventResult object that the client knows how to handle in each different use case.
+
+  >>>>> NOTE: The data bag is expected to have an appEventId property if the Ethereum transaction it represents is associated with an App Event!
+

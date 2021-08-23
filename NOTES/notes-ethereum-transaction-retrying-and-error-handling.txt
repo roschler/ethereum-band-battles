@@ -1,0 +1,6 @@
+// This file contains notes regarding retrying Ethereum transactions and handling errors in regards to
+//  Ethereum transactions too.
+
+The on-error handler of an Ethereum transaction lifecycle object carries an optional on-error handler.  It can signal the transaction manager to retry the transaction by returning TRUE, instead of FALSE.  The transaction will be retried if it has not exceeded the max retry count.
+
+NOTE: Additional measures will need to be taken to retry client side transactions since the client may need to redo the transaction from it's side.  How to save the user from double-paying for transactions if this happens?  WRINKLE: Is Metamask waiting for the transaction to be mined/confirmed before returning control the client side Javascript code?

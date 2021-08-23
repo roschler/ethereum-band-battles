@@ -1,0 +1,146 @@
+doctype html
+html
+    block variables
+    head
+        //- Each Jade view can set the "title" variable in their own "variables" block to set the title for the page.
+        title=title
+
+        // --- Twitter Bootstrap
+        link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css", rel="stylesheet")
+        // --- Twitter Bootstrap fonts.
+        link(rel="stylesheet", type="text/css", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css")
+        // --- Main stylesheet for the app.
+        link(rel='stylesheet', href='/stylesheets/style.css', type='text/css')
+        // --- Bootstrap slider.
+        link(rel='stylesheet', href='/Bootstrap-Slider/bootstrap-slider.css', type='text/css')
+        // --- YouTube player.
+        link(rel='stylesheet', href='/stylesheets/youtube-player-style.css', type='text/css')
+
+        link(rel='stylesheet', href='/Custom-Context-Menu-callmenick/context-menu-callmenick.css', type='text/css')
+
+        block header_css
+
+        // JAVASCRIPT
+
+        // --- Global namespace.
+        script(type="text/javascript", src="/javascripts/global-namespace.js")
+
+        // --- Configuration elements set up by the server.
+        script(type="text/javascript", src="/js/myconfig.js")
+
+        // --- Jquery
+        script(type="text/javascript", src="https://code.jquery.com/jquery-3.3.1.min.js")
+        // --- Twitter Bootstrap
+        script(type="text/javascript", src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
+
+        // --- List widget
+        script(type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js")
+        // --- Handlebars templating engine for CLIENT side templating (JADE for serve side templating.)
+        script(type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js")
+
+        // JQuery cookie storage helper code for Chrome.
+        script(type="text/javascript", src="../javascripts/storage/jquery.cookie.js")
+
+        // Cookie package for other browsers.
+        script(type="text/javascript", src="../javascripts/storage/js.cookie.js")
+
+        // For use by Google library code (See deps.js).
+        script(type="text/javascript", src="../javascripts/storage/storage.js")
+
+        // What we use for local storage.
+        script(type="text/javascript", src="../javascripts/storage/jstorage.js")
+
+        // Google Google Closure Library.
+        script(type="text/javascript", src="/javascripts/google-closure/base.js")
+        script(type="text/javascript", src="/javascripts/google-closure/deps.js")
+        script(type="text/javascript", src="/javascripts/google-closure/debug/error.js")
+        script(type="text/javascript", src="/javascripts/google-closure/asserts/asserts.js")
+        script(type="text/javascript", src="/javascripts/google-closure/array/array.js")
+        script(type="text/javascript", src="/javascripts/google-closure/string/string.js")
+
+        // Miscellaneous Javascript routines.
+        script(type="text/javascript", src="/javascripts/misc/misc.js")
+
+        // Auxiliary constants used by the app.
+        script(type="text/javascript", src="/javascripts/misc/aux-game-constants.js")
+
+        // More miscellaneous code shared between the server and client.
+        // script(type="text/javascript", src="/javascripts/misc/misc-shared.js")
+
+        // More miscellaneous code shared between the server and client.
+        script(type="text/javascript", src="/javascripts/misc/misc-shared.js")
+
+        // Spinner animation.
+        script(type="text/javascript", src="/javascripts/spin.js")
+
+        // Edit text mini-form.
+        script(type="text/javascript", src="/javascripts/page-support/edit-text-mini-form.js")
+
+        // Context menu plugin.
+        script(type="text/javascript", src="/Custom-Context-Menu-callmenick/context-menu-callmenick.js")
+
+        // Bootstrap slider.
+        script(type="text/javascript", src="/Bootstrap-Slider/bootstrap-slider.js")
+
+        // YouTube player support routines.
+        <!-- script(type="text/javascript", src="/javascripts/youtube/youtube-support-routines.js") -->
+
+        // The events npm package made client side.
+        script(type="text/javascript", src="/javascripts/misc/events.js")
+
+        // The load-script2 npm package made client side.
+        script(type="text/javascript", src="/javascripts/misc/load-script2.js")
+
+        // The yt-player npm package made client side.
+        script(type="text/javascript", src="/javascripts/youtube/yt-player.js")
+
+        // The game details object.
+        // script(type="text/javascript", src="/javascripts/game-objects/game-details.js")
+
+        // The user details object.
+        // script(type="text/javascript", src="/javascripts/game-objects/user-details.js")
+
+        // The video details object.
+        // script(type="text/javascript", src="/javascripts/game-objects/video-details.js")
+
+        // The video bookmark details object.
+        //script(type="text/javascript", src="/javascripts/game-objects/video-bookmark-details.js")
+
+        // Reconstitute objects from server to full-fledged Javascript "classes".
+        // script(type="text/javascript", src="/javascripts/game-objects/reconstituteGameObjects.js")
+
+        // PubNub & chat related objects.
+        script(type="text/javascript", src="/javascripts/pubnub/pubnub.js")
+        // script(type="text/javascript", src="/javascripts/pubnub/pubnub-support-client-side.js")
+
+        // The app object.
+        // script(type="text/javascript", src="/javascripts/app-object.js")
+
+        // Spinner animation.
+        script(type="text/javascript", src="/javascripts/spin.js")
+
+        // Jquery html5sortable plugin.
+        script(type="text/javascript", src="/jQuery-Drag-drop-Sorting-Plugin-For-Bootstrap-html5sortable/jquery.sortable.js")
+
+    //- NOTE: Do not set the style for page-div here so that the page level views
+    //  that extend from this partial view can make their own CSS/style choices.
+    div(id="page-div")
+        // Common page header.
+        div(id="header-div", class="container")
+            a(href="/MAIN", title="Return to the Main directory page.")
+                //- img(src="/images/logo.png", alt="Logo", class="logo", style="width: 50px; height: 50px")
+            //- If the target page did not set the title variable, use a default value.
+            - var theTitle = titleVar ? titleVar : "Video Playlists"
+            div(id="page-title-div", class="width-100-percent")
+                div(id="page-title-text-div")
+                    span(style="font-size: x-large", class="page-title") #{theTitle}
+                div(id="page-title-timer-div", class="hidden")
+                    span(style="font-size: x-large", class="countdown-timer") 0 seconds
+
+            //- This div allows each page to add content to the title line.
+            div(id="put-sub-page-content-here-div", class="width-100-percent")
+                block sub-page-title-content
+
+        // Page body.
+        body
+            block content

@@ -1,0 +1,26 @@
+// This file contains things to try when having problems with Metamask/Ganache, especially INTERNAL JSON-RPC errors.
+
+Preflight Check
+
+- DID YOU DEPLOY THE CONTRACT SINCE GANACHE HAS BEEN (RE-)STARTED?
+- Is the latest contract address set in the Node.JS code? (Look at the _deployedAt data member in contract-details.js).
+(REMEMBER TO RESTART THE NODE.JS SERVER AND ANY CLIENT WEB PAGES USING IT SO THAT NEW CONTRACT ADDRESS PROPAGATES TO
+    THE CLIENT SIDE CODE! (i.e. - eliminating the stale contract address problem).
+
+- Is Ganache running?
+- Is it running properly?  (one time it had a blank white screen and was dead).
+- Are you logged into Metamask?
+- Are you logged on to the correct Ethereum network?
+- Are you using the correct Metamask account when executing transactions?
+- Does the Metamask account being used have a balance on the current Ethereum network?
+
+
+Thing to Try
+
+- Try resetting the account in Metamask to rule out the "stale block number" potential problem. Remember to connect
+    to a different Ethereum network and then connect back to the desired one to make sure Metamask resets completely.
+
+    Desperation level
+
+- Turn on VERBOSE LOGS in Ganache, save & restart, reset Metamask as described above, and see if the logs show why
+the Internal JSON-RPC error is happening.

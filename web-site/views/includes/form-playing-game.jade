@@ -1,0 +1,39 @@
+//- The include view that has form elements for when the game is in play, showing a video.
+
+
+// Host DIV.
+div(id="form-playing-game-host-div", class="container height-100-percent")
+
+    // ----- LINKED SEEK SLIDER
+    // label(id="linked-seek-slider-header-label", for="linked-seek-slider-input", class="col-2 col-form-label project-field-label") Linked Video Position
+    div(id="linked-seek-slider-with-value-label-div" )
+        // label(id="linked-seek-slider-input-label", for="linked-seek-slider-input", class="col-2 col-form-label project-field-label") 50%
+        input(id="linked-seek-slider-input" class="slider" data-slider-id="linked-seek-slider-slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0")
+
+    div(class="height-100-percent")
+        // ----- STATUS MESSAGE
+
+        div(id="pg-status-message")
+            label(class="game-status generic-label") GAME STATUS
+            span(class="show-game-status generic-value") Playing Game!
+
+        // ----- BUTTONS ROW.
+        div(id="ge-buttons-row-div", class="field-value-holder" role="group" aria-label="Buttons")
+            // ---------------------- BUTTONS ROW ----------------------------
+            button(id="ge-mark-location-button" class="btn blue bg-yellow btn-md select-video choose-loc") Mark Location
+
+            button(id="ge-submit-choice-button", class="btn blue bg-white btn-md generic-button choose-loc") Submit Choice
+
+            div(id="time-location-marked-div")
+                label(id="label-marked-video-location", for="marked-video-location-span" class="col-2 col-form-label project-field-label")
+                    | Location chosen:
+                span(id="marked-video-location-span") (none)
+
+
+        div(id="pg-help-div", class="width-100-percent pg-help field-value-holder")
+            p(class='pg-help')
+                | Watch the video.  Mark the spot you think everyone will like the most
+                | by clicking on the Mark Location button.  When you are ready, click
+                | the Submit Choice button to lock in your choice.  When everyone has
+                | made their choice, the next round begins!
+

@@ -1,0 +1,6 @@
+This file gives a checklist for things tot ry when getting the dreaded Internal JSON-RPC error from Metamsk:
+
+- Is a deploy necessary?  If Ganache was restarted then one is.
+- Try resetting the Ganache accounts to clean up the block hash.  If you do this,
+    switch away from the Ganache network and back after resetting the account via
+    the Metamask menu.

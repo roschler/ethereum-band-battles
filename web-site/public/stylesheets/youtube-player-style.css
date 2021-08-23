@@ -1,0 +1,75 @@
+/* Style sheet for elements common to all pages that show a YouTube player. */
+
+div.youtube-player-div {
+    float: left;
+}
+
+div.start-point-div {
+    float: left;
+}
+
+div.end-point-div {
+    float: right;
+}
+
+div#above-bookmarks-div {
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+label#label-current-video-location {
+    color: lightblue;
+}
+
+span#current-video-location-span {
+    margin-left: 3px;
+    color: white;
+}
+
+/* was bookmark-data-time */
+span.start-point {
+    /* Start points are green for "go". */
+    color: darkgreen;
+    padding-left: 6px;
+}
+
+span.end-point {
+    /* End points are red for "stop". */
+    color: darkred;
+}
+
+span.bookmark-data-comment {
+    color: #B26D0A;
+    padding-left: 6px;
+}
+
+span.video-location-span {
+    margin-left: 3px;
+    color: crimson;
+}
+
+span.highlight-bookmark-comment {
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+div#current-location-div {
+    padding-top: 4px;
+    white-space: nowrap;
+}
+
+div#playback-led-div{
+    width: 20px;
+    display: inline-block;
+}
+
+div#time-update-div{
+    display: inline-block;
+}
+
+img#playback-led-img {
+    padding: 2px;
+}

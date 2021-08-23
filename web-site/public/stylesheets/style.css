@@ -1,0 +1,328 @@
+/* Page body */
+body {
+    /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+    background: #393939 !important;
+    color: white;
+}
+
+img.logo {
+    margin-right: 5px;
+}
+
+/* Add vertical scrollbars that are always visible to DIVs with this class */
+div.vertical-scroll-bar {
+    overflow:scroll;
+}
+
+/* Make all containers auto-width */
+.container{
+    width: auto;
+}
+
+.height-100-percent{
+    height: 100%;
+}
+
+.width-100-percent{
+    width: 100%;
+}
+
+input.my-mini-button {
+    margin-left: 10px;
+    margin-bottom: 3px;
+    height: 25px;
+    font-size: small;
+    background-color: lightsteelblue;
+    /* padding-top does the magic of centering the button text vertically. */
+    padding-top: 3px;
+}
+
+/* Hide inactive floating form div elements */
+div.hide-float-form-div {
+    display: none;
+    position: absolute;
+    z-index: auto;
+}
+
+/* Show active floating form div elements */
+div.show-float-form-div {
+    left: 30px;
+    top: 100px;
+    display: block;
+    position: absolute;
+    margin: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
+    z-index: 99;
+    background-color: #dfdfdf;
+    font-size: small;
+}
+
+div#header-div {
+    padding: 3px;
+    color: lightsalmon;
+}
+
+button.my-btn {
+    margin: 3px;
+}
+
+div#buttons-row-div {
+    width: auto; /* To keep the button row DIV from spilling out of the parent DIV */
+}
+
+/* Button toolbar */
+button#add-bookmark-button {
+    background-color: bisque;
+}
+
+button#select-video-button {
+    background-color: rosybrown;
+    color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+button#play-all-button {
+    background-color: lightpink;
+}
+
+button#play-from-here-button {
+    background-color: plum;
+}
+
+/* Four Quadrant page styles */
+
+div.quadrant-top-left {
+    clear: both;
+    float: left;
+    width: 650px;
+    height: 440px;
+    background-color: grey;
+    padding: 5px;
+}
+
+div.quadrant-bottom-left {
+    clear: both;
+    float: left;
+    width: 650px;
+    height: 400px;
+    color: paleturquoise;
+    background-color: darkslategray;
+    padding: 5px;
+}
+
+div.quadrant-top-right {
+    float: left;
+    padding: 8px;
+    width: 300px;
+    height: 440px;
+    background-color: lavender;
+    padding: 5px;
+}
+
+div.chat-room {
+    background-color: whitesmoke;
+    margin: 2px;
+    height: 436px;
+}
+
+input#chat-message-input{
+    width: 242px;
+}
+
+div.quadrant-bottom-right {
+    float: left;
+    padding: 8px;
+    width: 300px;
+    height: 400px;
+    background-color: paleturquoise;
+    padding: 5px;
+}
+
+div.player-list {
+    background-color: whitesmoke;
+    margin: 2px;
+    height: 316px;
+}
+
+div#online-users-list-div {
+    background-color: white;
+    height: 390px;
+    color: blue;
+}
+
+div.online-user {
+    height: 25px;
+}
+
+p.quadrant-title {
+    font-size: large;
+    color: black;
+}
+
+/* ------------ Winners report -------------- */
+
+td.winner_name {
+    color: lightsalmon;
+    font-size: medium;
+}
+
+td.winner_video_title {
+    color: white;
+    font-size: x-large;
+}
+
+/* ------------ Online users list and Chat Room -------------- */
+
+div.chat-message-div{
+}
+
+ul#chat-message-list-ul{
+    padding: 0px; /* Override container class padding setting of 24px */
+}
+
+div.chat-message-holder{
+    height: 25px;
+}
+
+span.screen-name {
+    float: left;
+    margin-left: 3px;
+    color: palevioletred;
+}
+
+input.screen-name {
+    color: black;
+}
+
+span.online-user-status {
+    float: right;
+    margin-right: 10px;
+}
+
+span.chat-message-content {
+    float: right;
+    margin-right: 10px;
+}
+
+input.user-ethereum-public-address{
+    color: black;
+}
+
+/* ---------------- Game creation form ----------------------*/
+
+div#chat-room-name-div{
+    width: 60%;
+    float: left;
+}
+
+div#create-game-button-host-div{
+    width: auto;
+    float: right;
+    margin-right: 5px;
+}
+
+
+/* ---------------- Common Form Styles ----------------------*/
+
+button.select-video {
+    color: black;
+    background-color: darkorange;
+}
+
+div.button-row {
+    display: block;
+    margin-bottom: 10px;
+}
+
+div.form-elements-container{
+    clear: left;
+    float: left;
+}
+
+div.buttons-row-container{
+    clear: left;
+    float: left;
+    margin-top: 10px;
+}
+
+div.field-value-holder{
+    clear: left;
+    float: left;
+}
+
+label.generic-label{
+    color: turquoise;
+    min-width: 150px;
+}
+
+span.generic-value{
+    color: white;
+    margin-left: 3px;
+}
+
+button.generic-button{
+    background-color: mistyrose;
+    color: black;
+}
+
+input.game-invite-link{
+    float: left;
+    height: 30px;
+    width: 500px;
+}
+
+input.copy-to-clipboard{
+    float: left;
+}
+
+/* --------------- Help Area related, lower left quadrant */
+
+div.pg-help{
+    margin-top: 20px;
+}
+
+p.pg-help{
+    padding: 10px;
+    color: #393939;
+    background-color: whitesmoke;
+}
+
+div#time-location-marked-div{
+    float: right;
+    margin-left: 20px;
+}
+
+span#marked-video-location-span{
+    margin-left: 10px;
+    color: whitesmoke;
+}
+
+/* --------------- Metamask detection area */
+div#metamask-detection-graphic {
+    float: left;
+}
+
+div#metamask-detection-text {
+    padding: 10px;
+    float: right;
+}
+
+div#page-title-div {
+    height: 2em;
+    width: 640px;
+}
+
+div#page-title-text-div {
+    width: 85%;
+    float: left;
+}
+
+div#page-title-timer-div {
+    width: 30%;
+    float: right;
+}
+
+select#pick-video-select {
+    color: darkred;
+}

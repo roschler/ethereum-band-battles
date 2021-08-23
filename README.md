@@ -1,2 +1,2 @@
-# ethereum-band-battles
-Ethereum blockchain game that connects music lovers to their favorite bands in a fund-raising game.
+# ether-band-battles-work
+Work repo for ether-band-battles.  Content will be transferred to that public repository once finished.

@@ -1,0 +1,53 @@
+//- The include view that has form elements for the guest entry form.
+
+// Host DIV.
+div(id="form-guest-entry-host-div", class="container height-100-percent")
+
+    // ----- STATUS MESSAGE
+
+    div(id="ge-status-message")
+        label(class="game-status generic-label") GAME STATUS
+        span(class="show-game-status generic-value") Waiting for video selection & entry fee...
+
+    // ----- GAME DETAILS
+    div(class="field-value-holder")
+        // Game title.
+        label(class="game-status generic-label") Title
+        span(class="show-game-title generic-value")
+
+    // ----- ENTRY FEE
+    div(class="field-value-holder")
+        label(class="game-status generic-label") Entry Fee
+        span(class="show-game-entry-fee generic-value")
+
+    // ----- BAND DONATION PERCENTAGE
+    div(class="field-value-holder")
+        label(class="game-status generic-label") Band Donation %
+        span(class="show-game-band-donation-percentage generic-value")
+
+    // ----- ETHEREUM PUBLIC ADDRESS
+    //div(class="field-value-holder")
+    //    label(id="ge-ethereum-public-address-header-label", for="ge-ethereum-public-address-input", class="width-100-percent project-field-label") Your Public Address
+    //    input(id="ge-ethereum-public-address-input", class="width-100-percent user-ethereum-public-address", type="text")
+
+    // ----- CHAT ROOM NAME
+    div(id="ge-chat-room-name-div", class="field-value-holder")
+        label(id="ge-chat-room-name-header-label", class="width-100-percent", for="ge-chat-room-name-input") Your Name in the Chat Room
+        input(id="ge-chat-room-name-input", class="screen-name width-100-percent", type="text")
+
+    // ----- INVITE LINK
+    div(class="field-value-holder")
+        label(for="game-invite-link-textarea", class="game-status generic-label") Invite Link
+        div(id="entry-fee-edit-div", class="col-10")
+            input(id="game-invite-link-textarea", class="game-invite-link form-control", type="text")
+            button(id="ge-copy-invite-link-to-clipboard", data-clipboard-source="game-invite-link-textarea", class="copy-to-clipboard btn blue bg-white btn-md generic-button")
+                i(id="ge-copy-invite-link-to-clipboard-i", class="glyphicon glyphicon-copy", data-clipboard-source="game-invite-link-textarea")
+
+
+    // ----- BUTTONS ROW.
+    div(id="ge-buttons-row-div", class="field-value-holder" role="group" aria-label="Buttons")
+        // ---------------------- BUTTONS ROW ----------------------------
+        button(id="ge-select-video-button" class="btn blue bg-yellow btn-md select-video") Select Video
+
+        // ----- ENTER GAME BUTTON
+        button(id="ge-enter-game-btn", class="btn blue bg-white btn-md generic-button") Enter Game

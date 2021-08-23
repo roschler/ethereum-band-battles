@@ -1,0 +1,28 @@
+//- The include view that has form elements for when the game is over.
+
+// Host DIV.
+div(id="form-game-over-host-div", class="container height-100-percent")
+
+    // ----- linked-2 SEEK SLIDER
+    // label(id="linked-2-seek-slider-header-label", for="linked-2-seek-slider-input", class="col-2 col-form-label project-field-label") linked-2 Video Position
+    div(id="linked-2-seek-slider-with-value-label-div" )
+        // label(id="linked-2-seek-slider-input-label", for="linked-2-seek-slider-input", class="col-2 col-form-label project-field-label") 50%
+        input(id="linked-2-seek-slider-input" class="slider" data-slider-id="linked-2-seek-slider-slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0")
+
+    div(id="pick-video-div")
+        // The videos to choose from will be filled in before this select box is shown
+        //  using the contents of the winners array.
+        select(id='pick-video-select' class='selectpicker')
+
+    // ----- STATUS MESSAGE
+
+    div(id="gmov-status-message")
+        label(class="game-status generic-label") GAME STATUS
+        span(class="show-game-status generic-value") Game Over!
+
+    div(id="gmov-help-div", class="width-100-percent gmov-help field-value-holder")
+        p(class='gmov-help')
+            | Game Over!  Here are the results showing which videos each player won:
+
+    div(id="gmov-winners-report")
+

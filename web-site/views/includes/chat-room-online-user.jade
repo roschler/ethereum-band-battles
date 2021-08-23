@@ -1,0 +1,10 @@
+//- The include view that has the handlebars template for rendering a user in the online users list.
+
+//- ---------------- HANDLEBARS TEMPLATE --------------------------
+script(id="online-user-template", type="text/x-handlebars-template")
+    div(id="{{divId}}" class="online-user")
+        // User screen name for the chat room.
+        span(id="online-user-screen-name-span" class="field-label screen-name") {{screenName}}
+
+        // Current user status.
+        //span(id="online-user-status-span" class="field-label online-user-status") {{currentStatus}}

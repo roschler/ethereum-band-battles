@@ -1,0 +1,9 @@
+NOTES ON GENERAL CODING STRATEGIES
+
+- At all costs, avoid storing any objects in the data bag found in EthTransConfirmAndComplete objects when creating event handlers for that object to be used by Ethereum transaction lifecycle objects and the Ethereum transactions manager.  Instead, store only the IDs of the objects and retrieve a fresh copy of the object from Redis.  That will save us a ton of pain when it comes to dealing with stale objects copies.
+
+EXCEPTION: The game and user details objects are not written to Redis until AFTER we know the Ethereum transaction for making a game and adding a player complete successfully (in the on-completion handlers).  In this ONE case, store a game details object and a user details object in the data bag so the on-completion handlers DON'T have to look for the objects in Redis, since they won't be there yet.
+
+NOTES ON RETURN VALUES FROM EVENT HANDLERS THAT ETHEREUM TRANSACTION STEP HANDLERS
+
+Currently the result object from the user defined functions assigned to the confirm and complete object return a custom object that currently is only used for logging purposes.  Those result objects are wrapped into toResultWrapperObject objects by the promiseAllWithResultObjects_promise() function so that an Exception in any user defined function does NOT throw an Exception, which would fail the underlying entire Promise.all() operation nullifying ALL transactions currently managed by the Ethereum transaction manager.  Instead, the array of toResultWrapperObject's returned by promiseAllWithResultObjects_promise() is inspected by the Ethereum transaction manager and appropriate action(s) are taken.
